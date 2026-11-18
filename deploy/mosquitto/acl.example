@@ -1,0 +1,18 @@
+# Example ACL for production. Each device logs in with its device id as the
+# MQTT username, so %u below is the device id.
+
+# The backend reads everything devices send and writes everything else.
+user actspeed-backend
+topic read  actspeed/v1/devices/+/raw
+topic read  actspeed/v1/devices/+/status
+topic write actspeed/v1/profiles/+/events
+topic write actspeed/v1/profiles/+/output
+topic write actspeed/v1/devices/+/config
+topic write actspeed/v1/devices/+/hid
+
+# A device may only publish its own samples and status, and read what the
+# backend addresses to it.
+pattern write actspeed/v1/devices/%u/raw
+pattern write actspeed/v1/devices/%u/status
+pattern read  actspeed/v1/devices/%u/config
+pattern read  actspeed/v1/devices/%u/hid

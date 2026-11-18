@@ -1,0 +1,3 @@
+paho-mqtt>=2.1,<3
+# pygame-ce, not pygame: pygame 2.6 drops Bluetooth controllers on macOS.
+pygame-ce>=2.5,<3

@@ -1,0 +1,42 @@
+# Local development services. Start with:  docker compose -f deploy/docker-compose.yml up -d
+# Add Piper (offline speech) with:         docker compose -f deploy/docker-compose.yml --profile piper up -d
+name: actspeed
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: actspeed
+      POSTGRES_PASSWORD: actspeed
+      POSTGRES_DB: actspeed
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U actspeed"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    ports:
+      - "127.0.0.1:1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  piper:
+    profiles: ["piper"]
+    build: ./piper
+    environment:
+      PIPER_VOICE: en_US-lessac-medium
+      PIPER_EXTRA_VOICES: ro_RO-mihai-medium
+    ports:
+      - "127.0.0.1:5000:5000"
+    volumes:
+      - piper-voices:/voices
+
+volumes:
+  pgdata:
+  piper-voices:

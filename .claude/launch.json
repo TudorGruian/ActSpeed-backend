@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "actspeed-backend",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "set -a; [ -f .env ] && . ./.env; set +a; exec go run ./cmd/actspeed"],
+      "port": 8080
+    }
+  ]
+}
